@@ -1,0 +1,12 @@
+{
+  "name": "foresignal-mimic",
+  "version": "1.0.0",
+  "description": "Stealth scraper for Foresignal",
+  "main": "scraper.js",
+  "dependencies": {
+    "axios": "^1.6.7",
+    "puppeteer": "^22.0.0",
+    "puppeteer-extra": "^3.3.6",
+    "puppeteer-extra-plugin-stealth": "^2.11.2"
+  }
+}

@@ -40,7 +40,7 @@ const TARGET_URL = "https://foresignal.com/en/";
         const pair = pairMatch[1];
 
         // Extract Start Time
-        const timeMatch = html.match(/(\d{2}:\d{2})/);
+        const timeMatch = html.match(/UTC[+-]\d{2}:\d{2}\s+(\d{2}:\d{2})/);
         const time = timeMatch ? timeMatch[1] : "00:00";
 
         // Extract Pips

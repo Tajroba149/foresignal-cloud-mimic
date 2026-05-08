@@ -1,0 +1,24 @@
+name: Foresignal Stealth Scanner
+
+on:
+  schedule:
+    - cron: '*/5 * * * *' # Runs every 5 minutes
+  workflow_dispatch: # Gives you a manual "Run" button
+
+jobs:
+  run-mimic:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run Stealth Scraper
+        run: node scraper.js

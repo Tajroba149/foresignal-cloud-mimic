@@ -39,8 +39,9 @@ const TARGET_URL = "https://foresignal.com/en/";
         if (!pairMatch) return;
         const pair = pairMatch[1];
 
-        // Extract Start Time
-        const timeMatch = html.match(/UTC[+-]\d{2}:\d{2}[^\d]*(\d{2}:\d{2})/s);
+        // Strip HTML to find the clean time
+        const cleanText = html.replace(/<[^>]*>?/gm, ' ');
+        const timeMatch = cleanText.match(/From\s*UTC[+-]\d{2}:\d{2}\s*(\d{2}:\d{2})/i);
         const time = timeMatch ? timeMatch[1] : "00:00";
 
         // Extract Pips

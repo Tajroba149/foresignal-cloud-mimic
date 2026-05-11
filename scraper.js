@@ -5,7 +5,7 @@ const axios = require('axios');
 // Add stealth plugin to bypass Cloudflare
 puppeteer.use(StealthPlugin());
 
-const GOOGLE_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbzmk7IFW3LiBc27mQR_wjFZ2wdHGepnRy1y0tt2OWt9yMfmR2Bq18NWX9QDryCHC1wr/exec";
+const GOOGLE_WEBAPP_URL = process.env.GOOGLE_WEBAPP_URL;
 const TARGET_URL = "https://foresignal.com/en/";
 
 (async () => {

@@ -22,3 +22,7 @@ jobs:
 
       - name: Run Stealth Scraper
         run: node scraper.js
+      - name: Run Stealth Scraper
+        env:
+          GOOGLE_WEBAPP_URL: ${{ secrets.GOOGLE_URL }}
+        run: node scraper.js

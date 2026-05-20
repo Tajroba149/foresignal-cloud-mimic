@@ -27,44 +27,36 @@ const TARGET_URL = "https://foresignal.com/en/";
     await new Promise(r => setTimeout(r, 3000));
 
     console.log("Extracting live signals...");
-    const signals = await page.evaluate(() => {
+const signals = await page.evaluate(() => {
       const cards = document.querySelectorAll('.card.signal-card');
       let results = [];
+      let pairsFound = new Set(); // Memory to track which pairs we've already grabbed
 
       cards.forEach(card => {
+        // Grab HTML, replace tags with spaces to make clean text
         const html = card.innerHTML;
+        const text = html.replace(/<[^>]*>?/gm, ' ').replace(/\s+/g, ' '); 
         
-        // Extract Pair
-        const pairMatch = html.match(/([A-Z]{3}\/[A-Z]{3})/);
+        // 1. Extract Pair ONLY
+        const pairMatch = text.match(/([A-Z]{3}\/[A-Z]{3})/);
         if (!pairMatch) return;
         const pair = pairMatch[1];
 
-        // Strip HTML to find the clean time
-        const cleanText = html.replace(/<[^>]*>?/gm, ' ');
-        const timeMatch = cleanText.match(/From\s*UTC[+-]\d{2}:\d{2}\s*(\d{2}:\d{2})/i);
-        const time = timeMatch ? timeMatch[1] : "00:00";
+        // CRUCIAL: If we already found the newest card for this pair, skip the old history!
+        if (pairsFound.has(pair)) return;
 
-        // Extract Pips
-        const pipsMatch = html.match(/(?:Profit|Loss).*?pips.*?([+-]\d+)/si);
-        const pips = pipsMatch ? pipsMatch[1] : "";
-
-        // Status Logic
-        const isFilled = /Filled/i.test(html) || /(Profit|Loss).*?pips/is.test(html) || (/Bought at/i.test(html) && /Sold at/i.test(html));
-        const isCancelled = /Cancelled/i.test(html);
+        // 2. Extract Status ONLY
+        const isFilled = /Filled/i.test(text) || /(Profit|Loss)[,\s]*pips/i.test(text);
+        const isCancelled = /Cancelled/i.test(text);
 
         let status = "";
-        let details = "";
+        if (isFilled) status = "✅ FILLED";
+        else if (isCancelled) status = "❌ CANCELLED";
 
-        if (isFilled) {
-          status = "✅ FILLED";
-          details = pips ? `Result: ${pips} pips` : "Trade Finished";
-        } else if (isCancelled) {
-          status = "❌ CANCELLED";
-          details = "Cancelled by provider";
-        }
-
+        // 3. Save and remember
         if (status !== "") {
-          results.push({ pair, status, time, details });
+          results.push({ pair: pair, status: status }); // No time, no pips.
+          pairsFound.add(pair); // Mark this pair as found
         }
       });
       return results;

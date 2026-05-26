@@ -1,0 +1,16 @@
+name: Scanner Gamma
+on:
+  workflow_dispatch:
+jobs:
+  run-mimic:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm install
+      - name: Run Stealth Scraper
+        env:
+          GOOGLE_WEBAPP_URL: ${{ secrets.GOOGLE_URL }}
+        run: node scraper.js

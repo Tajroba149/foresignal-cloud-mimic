@@ -17,6 +17,11 @@ const TARGET_URL = "https://foresignal.com/en/";
 
   try {
     const page = await browser.newPage();
+    
+    // --- BYPASS THE 30-SECOND PANIC ---
+    page.setDefaultNavigationTimeout(90000); // 1.5 minutes
+    page.setDefaultTimeout(90000);
+    
     // Use a standard Windows Chrome user agent
     await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36');
 
@@ -27,7 +32,7 @@ const TARGET_URL = "https://foresignal.com/en/";
     await new Promise(r => setTimeout(r, 3000));
 
     console.log("Extracting live signals...");
-const signals = await page.evaluate(() => {
+    const signals = await page.evaluate(() => {
       const cards = document.querySelectorAll('.card.signal-card');
       let results = [];
       let pairsFound = new Set(); // Memory to track which pairs we've already grabbed

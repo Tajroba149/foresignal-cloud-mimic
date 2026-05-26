@@ -21,7 +21,7 @@ const TARGET_URL = "https://foresignal.com/en/";
     await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36');
 
     console.log("Navigating past the bouncer to Foresignal...");
-    await page.goto(TARGET_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
+    await page.goto(TARGET_URL, { waitUntil: 'domcontentloaded', timeout: 90000 });
     
     // Wait 3 seconds to let Cloudflare and the page fully settle
     await new Promise(r => setTimeout(r, 3000));
